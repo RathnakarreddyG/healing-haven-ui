@@ -2,114 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 210 40% 11%;
+    --background: 220 30% 96%;
+    --foreground: 220 25% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 40% 11%;
+    --card-foreground: 220 25% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 40% 11%;
+    --popover-foreground: 220 25% 10%;
 
-    --primary: 174 64% 27%;
+    --primary: 220 90% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 25% 95%;
-    --secondary-foreground: 210 40% 11%;
+    --secondary: 260 60% 60%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 210 15% 45%;
+    --muted: 220 20% 92%;
+    --muted-foreground: 220 15% 45%;
 
-    --accent: 174 50% 94%;
-    --accent-foreground: 174 64% 22%;
+    --accent: 220 80% 96%;
+    --accent-foreground: 220 90% 50%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 90%;
-    --input: 210 20% 92%;
-    --ring: 174 64% 27%;
+    --border: 220 20% 90%;
+    --input: 220 20% 94%;
+    --ring: 220 90% 56%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Custom Healthelic tokens */
-    --coral: 16 85% 57%;
+    /* Healthcare gradient tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(220 90% 56%) 0%, hsl(260 70% 60%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(25 95% 55%) 0%, hsl(340 80% 55%) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(220 30% 98%) 0%, hsl(220 25% 94%) 100%);
+    
+    --coral: 25 95% 55%;
     --coral-foreground: 0 0% 100%;
-    --coral-hover: 16 85% 50%;
     
-    --teal-light: 174 40% 96%;
-    --teal-medium: 174 50% 45%;
-    
-    --chat-user: 174 50% 94%;
+    --chat-user: 220 80% 96%;
     --chat-ai: 0 0% 100%;
     
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 210 20% 35%;
-    --sidebar-primary: 174 64% 27%;
+    --sidebar-background: 220 25% 12%;
+    --sidebar-foreground: 220 15% 85%;
+    --sidebar-primary: 220 90% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 174 50% 96%;
-    --sidebar-accent-foreground: 174 64% 22%;
-    --sidebar-border: 210 20% 92%;
-    --sidebar-ring: 174 64% 27%;
-    --sidebar-muted: 210 15% 55%;
+    --sidebar-accent: 220 30% 20%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 20% 18%;
+    --sidebar-ring: 220 90% 56%;
+    --sidebar-muted: 220 15% 55%;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(210 20% 50% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(210 20% 50% / 0.08), 0 2px 4px -2px hsl(210 20% 50% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(210 20% 50% / 0.08), 0 4px 6px -4px hsl(210 20% 50% / 0.06);
-    --shadow-card: 0 1px 3px hsl(210 20% 50% / 0.06), 0 1px 2px -1px hsl(210 20% 50% / 0.06);
-    --shadow-input: 0 2px 8px hsl(210 20% 50% / 0.08);
+    /* Enhanced shadows */
+    --shadow-sm: 0 1px 2px hsl(220 30% 50% / 0.04);
+    --shadow-md: 0 4px 12px hsl(220 30% 50% / 0.08);
+    --shadow-lg: 0 8px 30px hsl(220 30% 50% / 0.12);
+    --shadow-card: 0 2px 8px hsl(220 30% 50% / 0.06), 0 0 0 1px hsl(220 30% 50% / 0.04);
+    --shadow-input: 0 2px 4px hsl(220 30% 50% / 0.04), 0 0 0 1px hsl(220 25% 88%);
+    --shadow-glow: 0 0 40px hsl(220 90% 56% / 0.15);
   }
 
   .dark {
-    --background: 210 40% 8%;
-    --foreground: 210 20% 95%;
+    --background: 220 25% 8%;
+    --foreground: 220 15% 95%;
 
-    --card: 210 35% 12%;
-    --card-foreground: 210 20% 95%;
+    --card: 220 25% 12%;
+    --card-foreground: 220 15% 95%;
 
-    --popover: 210 35% 12%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 220 25% 12%;
+    --popover-foreground: 220 15% 95%;
 
-    --primary: 174 55% 45%;
-    --primary-foreground: 210 40% 8%;
+    --primary: 220 85% 65%;
+    --primary-foreground: 220 25% 8%;
 
-    --secondary: 210 30% 18%;
-    --secondary-foreground: 210 20% 95%;
+    --secondary: 260 55% 65%;
+    --secondary-foreground: 220 25% 8%;
 
-    --muted: 210 30% 18%;
-    --muted-foreground: 210 15% 60%;
+    --muted: 220 25% 18%;
+    --muted-foreground: 220 15% 60%;
 
-    --accent: 174 40% 18%;
-    --accent-foreground: 174 55% 70%;
+    --accent: 220 40% 18%;
+    --accent-foreground: 220 85% 70%;
 
-    --destructive: 0 62% 45%;
+    --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 30% 20%;
-    --input: 210 30% 18%;
-    --ring: 174 55% 45%;
+    --border: 220 25% 18%;
+    --input: 220 25% 15%;
+    --ring: 220 85% 65%;
 
-    --coral: 16 80% 55%;
+    --coral: 25 90% 58%;
     --coral-foreground: 0 0% 100%;
-    --coral-hover: 16 80% 48%;
 
-    --chat-user: 174 40% 18%;
-    --chat-ai: 210 35% 14%;
+    --chat-user: 220 40% 18%;
+    --chat-ai: 220 25% 14%;
 
-    --sidebar-background: 210 35% 10%;
-    --sidebar-foreground: 210 15% 75%;
-    --sidebar-primary: 174 55% 45%;
-    --sidebar-primary-foreground: 210 40% 8%;
-    --sidebar-accent: 174 40% 15%;
-    --sidebar-accent-foreground: 174 55% 70%;
-    --sidebar-border: 210 30% 18%;
-    --sidebar-ring: 174 55% 45%;
-    --sidebar-muted: 210 15% 50%;
+    --sidebar-background: 220 30% 6%;
+    --sidebar-foreground: 220 15% 80%;
+    --sidebar-primary: 220 85% 65%;
+    --sidebar-primary-foreground: 220 25% 8%;
+    --sidebar-accent: 220 30% 15%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 220 25% 12%;
+    --sidebar-ring: 220 85% 65%;
+    --sidebar-muted: 220 15% 50%;
   }
 }
 
@@ -119,32 +119,55 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    font-family: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
   }
 }
 
 @layer components {
-  .healthelic-card {
-    @apply bg-card rounded-xl border border-border;
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-xl rounded-2xl border border-white/20;
     box-shadow: var(--shadow-card);
   }
 
-  .healthelic-input {
-    @apply bg-card rounded-xl border border-border px-4 py-3;
-    box-shadow: var(--shadow-input);
+  .glass-sidebar {
+    @apply bg-sidebar backdrop-blur-xl;
   }
 
-  .healthelic-sidebar-item {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer;
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .healthelic-sidebar-item-active {
-    @apply bg-sidebar-accent text-sidebar-accent-foreground font-medium;
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--gradient-primary);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    pointer-events: none;
   }
 }
 
@@ -155,11 +178,11 @@
 
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
+    scrollbar-color: hsl(var(--sidebar-accent)) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
@@ -167,7 +190,7 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 3px;
+    background-color: hsl(var(--sidebar-accent));
+    border-radius: 2px;
   }
 }
