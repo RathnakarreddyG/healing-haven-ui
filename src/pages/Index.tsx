@@ -3,21 +3,29 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { SuggestedQuestions } from "@/components/chat/SuggestedQuestions";
+import { useNavigate } from "react-router-dom";
+import { Play, BookOpen, BarChart3, Wrench, Bug } from "lucide-react";
 
 const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const navigate = useNavigate();
 
   const handleSendMessage = (message: string) => {
     console.log("Sending message:", message);
-    // Navigate to chat page or handle message
+    navigate("/chat");
   };
 
   const handleSelectQuestion = (question: string) => {
     console.log("Selected question:", question);
+    navigate("/chat");
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
+      {/* Decorative orbs */}
+      <div className="floating-orb h-96 w-96 bg-primary/30 -top-48 -right-48" />
+      <div className="floating-orb h-72 w-72 bg-secondary/20 bottom-20 left-1/3" />
+
       {/* Sidebar */}
       <Sidebar 
         isCollapsed={sidebarCollapsed} 
@@ -25,81 +33,85 @@ const Index = () => {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <Header userInitials="RA" />
+      <div className="flex-1 flex flex-col min-w-0 relative">
+        <Header userInitials="RR" />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-6 py-12">
-            {/* Welcome Message */}
-            <div className="text-center mb-10 animate-fade-in">
-              <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-                Welcome, Dr. Ratnakar Reddy
+          <div className="max-w-3xl mx-auto px-6 py-16">
+            {/* Welcome Section */}
+            <div className="text-center mb-12 opacity-0 animate-fade-in">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/50 border border-primary/20 mb-6">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                <span className="text-sm font-medium text-primary">AI Medical Assistant</span>
+              </div>
+              
+              <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
+                Welcome, <span className="gradient-text">Dr. Ratnakar</span>
               </h1>
-              <p className="text-muted-foreground">
-                How can I assist you today?
+              <p className="text-lg text-muted-foreground max-w-lg mx-auto">
+                Your intelligent companion for evidence-based clinical decisions
               </p>
             </div>
 
             {/* Chat Input */}
-            <div className="mb-10 animate-fade-in" style={{ animationDelay: "100ms" }}>
+            <div className="mb-12 opacity-0 animate-fade-in" style={{ animationDelay: "150ms" }}>
               <ChatInput 
                 onSend={handleSendMessage}
                 placeholder="What laboratory tests should I order in an acute heart failure exacerbation?"
+                size="large"
               />
             </div>
 
             {/* Suggested Questions */}
-            <SuggestedQuestions onSelect={handleSelectQuestion} />
+            <div className="opacity-0 animate-fade-in" style={{ animationDelay: "300ms" }}>
+              <SuggestedQuestions onSelect={handleSelectQuestion} />
+            </div>
           </div>
         </main>
 
-        {/* Action buttons - bottom left, adjust position based on sidebar */}
+        {/* Floating Action Buttons */}
         <div 
-          className="fixed bottom-4 flex items-center gap-2 z-10 transition-all duration-300"
-          style={{ left: sidebarCollapsed ? "80px" : "272px" }}
+          className="fixed bottom-6 flex items-center gap-3 z-10 transition-all duration-300"
+          style={{ left: sidebarCollapsed ? "96px" : "304px" }}
         >
-          <ActionButton color="primary" />
-          <ActionButton color="muted" />
-          <ActionButton color="coral" />
-          <ActionButton color="pink" />
+          <FloatingButton icon={Play} gradient="from-primary to-secondary" />
+          <FloatingButton icon={BookOpen} color="bg-muted" textColor="text-muted-foreground" />
+          <FloatingButton icon={BarChart3} gradient="from-coral to-pink-500" />
+          <FloatingButton icon={Wrench} color="bg-purple-500" textColor="text-white" />
         </div>
 
-        {/* Report a Bug - bottom right */}
-        <div className="fixed bottom-4 right-4 z-10">
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground bg-card border border-border rounded-lg shadow-sm transition-colors">
-            <BugIcon className="h-4 w-4" />
-            Report a Bug
-          </button>
-        </div>
+        {/* Report Bug */}
+        <button className="fixed bottom-6 right-6 flex items-center gap-2 px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground bg-card border border-border rounded-xl shadow-card hover:shadow-md transition-all z-10">
+          <Bug className="h-4 w-4" />
+          Report a Bug
+        </button>
       </div>
     </div>
   );
 };
 
-function ActionButton({ color }: { color: string }) {
-  const colorClasses: Record<string, string> = {
-    primary: "bg-primary text-primary-foreground",
-    muted: "bg-secondary text-muted-foreground",
-    coral: "bg-coral text-coral-foreground",
-    pink: "bg-pink-500 text-white",
-  };
-
+function FloatingButton({ 
+  icon: Icon, 
+  gradient, 
+  color, 
+  textColor = "text-white" 
+}: { 
+  icon: React.ElementType; 
+  gradient?: string; 
+  color?: string;
+  textColor?: string;
+}) {
   return (
-    <button className={`h-10 w-10 rounded-full ${colorClasses[color]} flex items-center justify-center shadow-md hover:scale-105 transition-transform`}>
-      <IconPlaceholder />
+    <button 
+      className={`h-12 w-12 rounded-xl flex items-center justify-center shadow-lg hover:scale-105 transition-transform ${
+        gradient ? `bg-gradient-to-br ${gradient}` : color
+      } ${textColor}`}
+    >
+      <Icon className="h-5 w-5" />
     </button>
-  );
-}
-
-function IconPlaceholder() {
-  return <div className="h-4 w-4 rounded-sm bg-current opacity-60" />;
-}
-
-function BugIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M8 2l1.5 1.5M16 2l-1.5 1.5M12 9v4M12 17h.01M9 9a3 3 0 016 0c0 2-3 3-3 3M7.5 11L6 10M16.5 11L18 10M7.5 15L5 16M16.5 15L19 16" />
-    </svg>
   );
 }
 

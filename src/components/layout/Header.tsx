@@ -1,40 +1,58 @@
-import { Moon, Bell, ChevronDown } from "lucide-react";
+import { Moon, Bell, Settings, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
   userName?: string;
   userInitials?: string;
+  showNavPills?: boolean;
+  currentQuestion?: number;
+  totalQuestions?: number;
 }
 
-export function Header({ userName = "RA", userInitials = "RA" }: HeaderProps) {
+export function Header({ 
+  userInitials = "RA",
+  showNavPills = false,
+  currentQuestion = 1,
+  totalQuestions = 2
+}: HeaderProps) {
   return (
-    <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4">
-      {/* Logo */}
-      <div className="flex items-center gap-2">
-        <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-          <svg 
-            viewBox="0 0 24 24" 
-            className="h-5 w-5 text-primary-foreground"
-            fill="currentColor"
-          >
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-          </svg>
-        </div>
-        <span className="font-display font-bold text-lg text-foreground">Healthelic</span>
+    <header className="h-16 border-b border-border/50 bg-card/50 backdrop-blur-xl flex items-center justify-between px-6">
+      {/* Left - Breadcrumb or empty */}
+      <div className="flex items-center gap-3">
+        {showNavPills && (
+          <div className="flex items-center gap-2 bg-muted/50 rounded-full p-1">
+            {Array.from({ length: totalQuestions }).map((_, i) => (
+              <button
+                key={i}
+                className={`h-8 w-8 rounded-full text-xs font-semibold transition-all ${
+                  i + 1 === currentQuestion
+                    ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md"
+                    : "text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Right side */}
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
           <Moon className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" className="text-muted-foreground relative">
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl relative">
           <Bell className="h-5 w-5" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-coral rounded-full" />
+          <span className="absolute top-2 right-2 h-2 w-2 bg-coral rounded-full animate-pulse" />
         </Button>
-        <Button variant="ghost" className="gap-2 text-foreground">
-          <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center">
-            <span className="text-sm font-medium text-accent-foreground">{userInitials}</span>
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
+          <Settings className="h-5 w-5" />
+        </Button>
+        <div className="h-6 w-px bg-border mx-1" />
+        <Button variant="ghost" className="gap-2 rounded-xl hover:bg-accent">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-accent to-primary/20 flex items-center justify-center border border-primary/20">
+            <span className="text-sm font-semibold text-primary">{userInitials}</span>
           </div>
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </Button>
