@@ -3,21 +3,24 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { SuggestedQuestions } from "@/components/chat/SuggestedQuestions";
+import { ModeSelector } from "@/components/chat/ModeSelector";
 import { useNavigate } from "react-router-dom";
 import { Play, BookOpen, BarChart3, Wrench, Bug } from "lucide-react";
+import { ChatMode } from "@/types/chat";
 
 const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [chatMode, setChatMode] = useState<ChatMode>("interactive");
   const navigate = useNavigate();
 
   const handleSendMessage = (message: string) => {
     console.log("Sending message:", message);
-    navigate("/chat");
+    navigate(`/chat?mode=${chatMode}`);
   };
 
   const handleSelectQuestion = (question: string) => {
     console.log("Selected question:", question);
-    navigate("/chat");
+    navigate(`/chat?mode=${chatMode}`);
   };
 
   return (
@@ -54,6 +57,11 @@ const Index = () => {
               <p className="text-lg text-muted-foreground max-w-lg mx-auto">
                 Your intelligent companion for evidence-based clinical decisions
               </p>
+            </div>
+
+            {/* Mode Selector */}
+            <div className="mb-6 opacity-0 animate-fade-in flex justify-center" style={{ animationDelay: "100ms" }}>
+              <ModeSelector mode={chatMode} onModeChange={setChatMode} />
             </div>
 
             {/* Chat Input */}

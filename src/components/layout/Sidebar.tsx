@@ -12,13 +12,8 @@ import {
   Stethoscope
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface ChatHistoryItem {
-  id: string;
-  title: string;
-  timestamp: string;
-  isActive?: boolean;
-}
+import { ChatHistoryItem } from "@/types/chat";
+import { ModeBadge } from "@/components/chat/ModeBadge";
 
 interface SidebarProps {
   isCollapsed?: boolean;
@@ -36,13 +31,13 @@ const menuItems = [
 ];
 
 const chatHistory: ChatHistoryItem[] = [
-  { id: "1", title: "Severe Stomach Pain", timestamp: "12 min ago", isActive: true },
-  { id: "2", title: "Cardiac Assessment", timestamp: "1 week ago" },
-  { id: "3", title: "Thigh Pain Evaluation", timestamp: "1 week ago" },
-  { id: "4", title: "Diabetes Management", timestamp: "1 week ago" },
-  { id: "5", title: "Hypertension Review", timestamp: "1 week ago" },
-  { id: "6", title: "Blood Cancer Subtypes", timestamp: "2 weeks ago" },
-  { id: "7", title: "ICU Transfusion Protocol", timestamp: "2 weeks ago" },
+  { id: "1", title: "Severe Stomach Pain", timestamp: "12 min ago", isActive: true, mode: "interactive" },
+  { id: "2", title: "Cardiac Assessment", timestamp: "1 week ago", mode: "direct" },
+  { id: "3", title: "Thigh Pain Evaluation", timestamp: "1 week ago", mode: "interactive" },
+  { id: "4", title: "Diabetes Management", timestamp: "1 week ago", mode: "direct" },
+  { id: "5", title: "Hypertension Review", timestamp: "1 week ago", mode: "interactive" },
+  { id: "6", title: "Blood Cancer Subtypes", timestamp: "2 weeks ago", mode: "direct" },
+  { id: "7", title: "ICU Transfusion Protocol", timestamp: "2 weeks ago", mode: "interactive" },
 ];
 
 export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelect }: SidebarProps) {
@@ -188,7 +183,10 @@ function ChatItem({
       )}
     >
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium truncate">{chat.title}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-medium truncate">{chat.title}</p>
+          <ModeBadge mode={chat.mode} size="sm" />
+        </div>
         <p className="text-xs text-sidebar-muted">{chat.timestamp}</p>
       </div>
       <button
