@@ -1,17 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowDown } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { ChatMessage } from "@/components/chat/ChatMessage";
+import { ModeBadge } from "@/components/chat/ModeBadge";
 import { Play, BookOpen, BarChart3, Wrench, Bug } from "lucide-react";
-
-interface Message {
-  id: string;
-  type: "user" | "assistant";
-  content: string;
-  references?: { id: number; text: string }[];
-}
+import { Message, ChatMode } from "@/types/chat";
 
 const sampleMessages: Message[] = [
   {
@@ -41,6 +37,8 @@ const sampleMessages: Message[] = [
 ];
 
 const Chat = () => {
+  const [searchParams] = useSearchParams();
+  const chatMode = (searchParams.get("mode") as ChatMode) || "interactive";
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [messages, setMessages] = useState<Message[]>(sampleMessages);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -92,7 +90,9 @@ const Chat = () => {
           showNavPills={true}
           currentQuestion={2}
           totalQuestions={2}
-        />
+        >
+          <ModeBadge mode={chatMode} size="md" />
+        </Header>
 
         {/* Messages */}
         <main 

@@ -1,5 +1,6 @@
 import { Moon, Bell, Settings, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ReactNode } from "react";
 
 interface HeaderProps {
   userName?: string;
@@ -7,13 +8,15 @@ interface HeaderProps {
   showNavPills?: boolean;
   currentQuestion?: number;
   totalQuestions?: number;
+  children?: ReactNode;
 }
 
 export function Header({ 
   userInitials = "RA",
   showNavPills = false,
   currentQuestion = 1,
-  totalQuestions = 2
+  totalQuestions = 2,
+  children
 }: HeaderProps) {
   return (
     <header className="h-16 border-b border-border/50 bg-card/50 backdrop-blur-xl flex items-center justify-between px-6">
@@ -35,6 +38,7 @@ export function Header({
             ))}
           </div>
         )}
+        {children}
       </div>
 
       {/* Right side */}
