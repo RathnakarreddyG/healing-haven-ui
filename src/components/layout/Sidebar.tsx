@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { 
-  Plus, 
+  MessageSquarePlus, 
   Clock, 
   Hash, 
   Bookmark, 
@@ -23,7 +23,7 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { icon: Plus, label: "New Chat", href: "/", isNew: true },
+  { icon: MessageSquarePlus, label: "New Chat", href: "/", isNew: true },
   { icon: Clock, label: "History", href: "#" },
   { icon: Hash, label: "Topics", href: "#" },
   { icon: Bookmark, label: "Saved", href: "#" },
