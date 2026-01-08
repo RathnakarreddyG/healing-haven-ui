@@ -1,6 +1,7 @@
-import { Moon, Bell, Settings, ChevronDown } from "lucide-react";
+import { Moon, Sun, Bell, Settings, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface HeaderProps {
   userName?: string;
@@ -18,6 +19,8 @@ export function Header({
   totalQuestions = 2,
   children
 }: HeaderProps) {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <header className="h-16 border-b border-border/50 bg-card/50 backdrop-blur-xl flex items-center justify-between px-6">
       {/* Left - Breadcrumb or empty */}
@@ -43,8 +46,13 @@ export function Header({
 
       {/* Right side */}
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
-          <Moon className="h-5 w-5" />
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={toggleTheme}
+          className="text-muted-foreground hover:text-foreground rounded-xl"
+        >
+          {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
         </Button>
         <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl relative">
           <Bell className="h-5 w-5" />

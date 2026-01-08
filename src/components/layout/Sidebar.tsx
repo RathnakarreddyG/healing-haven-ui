@@ -56,7 +56,7 @@ export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelec
           <Stethoscope className="h-5 w-5 text-white" />
         </div>
         {!isCollapsed && (
-          <span className="font-display font-bold text-xl text-white">Healthelic</span>
+          <span className="font-display font-bold text-xl text-sidebar-foreground">Healthelic</span>
         )}
       </div>
 
@@ -75,9 +75,9 @@ export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelec
             key={item.label}
             href={item.href}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sidebar-foreground hover:bg-sidebar-accent hover:text-white transition-all duration-200",
+              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200",
               isCollapsed && "justify-center px-2",
-              item.isNew && "bg-gradient-to-r from-primary/20 to-secondary/20 text-white"
+              item.isNew && "bg-gradient-to-r from-primary/20 to-secondary/20 text-primary"
             )}
           >
             <item.icon className={cn("h-5 w-5 shrink-0", item.isNew && "text-primary")} />
@@ -96,7 +96,7 @@ export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelec
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-3 py-2.5 text-sm bg-sidebar-accent/50 border border-sidebar-border rounded-xl text-white placeholder:text-sidebar-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
+              className="w-full pl-10 pr-3 py-2.5 text-sm bg-sidebar-accent/50 border border-sidebar-border rounded-xl text-sidebar-foreground placeholder:text-sidebar-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
             />
           </div>
         </div>
@@ -149,11 +149,11 @@ export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelec
             <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-coral to-pink-500 flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-sm">SD</span>
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 bg-emerald-400 rounded-full border-2 border-sidebar" />
+            <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 bg-emerald-400 rounded-full border-2 border-sidebar-background" />
           </div>
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white truncate">SuperDave</p>
+              <p className="text-sm font-semibold text-sidebar-foreground truncate">SuperDave</p>
               <p className="text-xs text-sidebar-muted">Pro Member</p>
             </div>
           )}
@@ -178,7 +178,7 @@ function ChatItem({
       className={cn(
         "group flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200",
         isActive 
-          ? "bg-gradient-to-r from-primary/30 to-secondary/20 text-white border border-primary/30" 
+          ? "bg-gradient-to-r from-primary/30 to-secondary/20 text-sidebar-accent-foreground border border-primary/30" 
           : "text-sidebar-foreground hover:bg-sidebar-accent/70"
       )}
     >
@@ -190,7 +190,7 @@ function ChatItem({
         <p className="text-xs text-sidebar-muted">{chat.timestamp}</p>
       </div>
       <button
-        className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7 flex items-center justify-center rounded-lg hover:bg-sidebar-accent text-sidebar-muted hover:text-white"
+        className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7 flex items-center justify-center rounded-lg hover:bg-sidebar-accent text-sidebar-muted hover:text-sidebar-accent-foreground"
       >
         <MoreHorizontal className="h-4 w-4" />
       </button>
