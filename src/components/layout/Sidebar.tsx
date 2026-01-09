@@ -31,7 +31,7 @@ const menuItems = [
 ];
 
 const chatHistory: ChatHistoryItem[] = [
-  { id: "1", title: "Severe Stomach Pain", timestamp: "12 min ago", isActive: true, mode: "interactive" },
+  { id: "1", title: "Severe Stomach Pain", timestamp: "12 min ago", isActive: false, mode: "interactive" },
   { id: "2", title: "Cardiac Assessment", timestamp: "1 week ago", mode: "direct" },
   { id: "3", title: "Thigh Pain Evaluation", timestamp: "1 week ago", mode: "interactive" },
   { id: "4", title: "Diabetes Management", timestamp: "1 week ago", mode: "direct" },
