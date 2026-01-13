@@ -6,22 +6,30 @@ import { SuggestedQuestions } from "@/components/chat/SuggestedQuestions";
 import { ModeSelector } from "@/components/chat/ModeSelector";
 import { useNavigate } from "react-router-dom";
 import { Play, BookOpen, BarChart3, Wrench, Bug } from "lucide-react";
-import { ChatMode } from "@/types/chat";
+import { useChat } from "@/contexts/ChatContext";
 
 const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [chatMode, setChatMode] = useState<ChatMode>("interactive");
   const navigate = useNavigate();
+  const { createNewConversation, sendMessage, currentMode, setCurrentMode, getChatHistory, selectConversation } = useChat();
 
-  const handleSendMessage = (message: string) => {
-    console.log("Sending message:", message);
-    navigate(`/chat?mode=${chatMode}`);
+  const handleSendMessage = async (message: string) => {
+    // Create a new conversation and send the message
+    createNewConversation(currentMode);
+    // Navigate to chat page
+    navigate(`/chat?mode=${currentMode}&initial=${encodeURIComponent(message)}`);
   };
 
   const handleSelectQuestion = (question: string) => {
-    console.log("Selected question:", question);
-    navigate(`/chat?mode=${chatMode}`);
+    handleSendMessage(question);
   };
+
+  const handleChatSelect = (id: string) => {
+    selectConversation(id);
+    navigate(`/chat?mode=${currentMode}`);
+  };
+
+  const chatHistory = getChatHistory();
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -33,6 +41,9 @@ const Index = () => {
       <Sidebar 
         isCollapsed={sidebarCollapsed} 
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        chatHistory={chatHistory}
+        onChatSelect={handleChatSelect}
+        onNewChat={() => navigate("/")}
       />
 
       {/* Main Content */}
@@ -61,7 +72,7 @@ const Index = () => {
 
             {/* Mode Selector */}
             <div className="mb-6 opacity-0 animate-fade-in flex justify-center" style={{ animationDelay: "100ms" }}>
-              <ModeSelector mode={chatMode} onModeChange={setChatMode} />
+              <ModeSelector mode={currentMode} onModeChange={setCurrentMode} />
             </div>
 
             {/* Chat Input */}

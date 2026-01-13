@@ -20,6 +20,8 @@ interface SidebarProps {
   onToggle?: () => void;
   activeChat?: string;
   onChatSelect?: (id: string) => void;
+  chatHistory?: ChatHistoryItem[];
+  onNewChat?: () => void;
 }
 
 const menuItems = [
@@ -30,18 +32,35 @@ const menuItems = [
   { icon: Sparkles, label: "Add-ons", href: "#" },
 ];
 
-const chatHistory: ChatHistoryItem[] = [
-  { id: "1", title: "Severe Stomach Pain", timestamp: "12 min ago", isActive: false, mode: "interactive" },
-  { id: "2", title: "Cardiac Assessment", timestamp: "1 week ago", mode: "direct" },
-  { id: "3", title: "Thigh Pain Evaluation", timestamp: "1 week ago", mode: "interactive" },
-  { id: "4", title: "Diabetes Management", timestamp: "1 week ago", mode: "direct" },
-  { id: "5", title: "Hypertension Review", timestamp: "1 week ago", mode: "interactive" },
-  { id: "6", title: "Blood Cancer Subtypes", timestamp: "2 weeks ago", mode: "direct" },
-  { id: "7", title: "ICU Transfusion Protocol", timestamp: "2 weeks ago", mode: "interactive" },
-];
-
-export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelect }: SidebarProps) {
+export function Sidebar({ 
+  isCollapsed = false, 
+  onToggle, 
+  activeChat, 
+  onChatSelect,
+  chatHistory = [],
+  onNewChat 
+}: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter chat history based on search
+  const filteredHistory = chatHistory.filter((chat) =>
+    chat.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Separate into today and previous
+  const todayChats = filteredHistory.filter((chat) => 
+    chat.timestamp.includes("min") || chat.timestamp.includes("hour") || chat.timestamp === "Just now"
+  );
+  const previousChats = filteredHistory.filter((chat) => 
+    !chat.timestamp.includes("min") && !chat.timestamp.includes("hour") && chat.timestamp !== "Just now"
+  );
+
+  const handleMenuClick = (item: typeof menuItems[0], e: React.MouseEvent) => {
+    if (item.label === "New Chat") {
+      e.preventDefault();
+      onNewChat?.();
+    }
+  };
 
   return (
     <aside 
@@ -74,6 +93,7 @@ export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelec
           <a
             key={item.label}
             href={item.href}
+            onClick={(e) => handleMenuClick(item, e)}
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200",
               isCollapsed && "justify-center px-2",
@@ -105,37 +125,51 @@ export function Sidebar({ isCollapsed = false, onToggle, activeChat, onChatSelec
       {/* Chat History */}
       {!isCollapsed && (
         <div className="flex-1 overflow-y-auto scrollbar-thin px-3 pb-3">
-          <div className="mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-sidebar-muted px-3">
-              Today
-            </span>
-          </div>
-          <div className="space-y-1">
-            {chatHistory.slice(0, 1).map((chat) => (
-              <ChatItem
-                key={chat.id}
-                chat={chat}
-                isActive={chat.id === activeChat || chat.isActive}
-                onClick={() => onChatSelect?.(chat.id)}
-              />
-            ))}
-          </div>
+          {todayChats.length > 0 && (
+            <>
+              <div className="mb-3">
+                <span className="text-xs font-semibold uppercase tracking-wider text-sidebar-muted px-3">
+                  Today
+                </span>
+              </div>
+              <div className="space-y-1">
+                {todayChats.map((chat) => (
+                  <ChatItem
+                    key={chat.id}
+                    chat={chat}
+                    isActive={chat.id === activeChat || chat.isActive}
+                    onClick={() => onChatSelect?.(chat.id)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
 
-          <div className="mt-5 mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-sidebar-muted px-3">
-              Previous
-            </span>
-          </div>
-          <div className="space-y-1">
-            {chatHistory.slice(1).map((chat) => (
-              <ChatItem
-                key={chat.id}
-                chat={chat}
-                isActive={chat.id === activeChat}
-                onClick={() => onChatSelect?.(chat.id)}
-              />
-            ))}
-          </div>
+          {previousChats.length > 0 && (
+            <>
+              <div className="mt-5 mb-3">
+                <span className="text-xs font-semibold uppercase tracking-wider text-sidebar-muted px-3">
+                  Previous
+                </span>
+              </div>
+              <div className="space-y-1">
+                {previousChats.map((chat) => (
+                  <ChatItem
+                    key={chat.id}
+                    chat={chat}
+                    isActive={chat.id === activeChat}
+                    onClick={() => onChatSelect?.(chat.id)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {filteredHistory.length === 0 && searchQuery && (
+            <div className="text-center py-8">
+              <p className="text-sm text-sidebar-muted">No conversations found</p>
+            </div>
+          )}
         </div>
       )}
 
