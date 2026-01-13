@@ -1,49 +1,53 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowDown } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { ChatMessage } from "@/components/chat/ChatMessage";
 import { ModeBadge } from "@/components/chat/ModeBadge";
+import { TypingIndicator } from "@/components/chat/TypingIndicator";
 import { Play, BookOpen, BarChart3, Wrench, Bug } from "lucide-react";
-import { Message, ChatMode } from "@/types/chat";
-
-const sampleMessages: Message[] = [
-  {
-    id: "1",
-    type: "assistant",
-    content: `Chest X-ray (CXR) is a primary imaging tool that can detect infiltrates, consolidation, or pleural effusions. It can also show hyperinflation in COPD or other lung pathologies. [1, 2, 3]
-
-• **Computed Tomography (CT) scan of the chest** — If the CXR is inconclusive, or if there is suspicion for complications (e.g., empyema, abscess), or alternative diagnoses like pulmonary embolism or bronchiectasis. [1, 2]`,
-    references: [
-      { id: 1, text: "BMJ Best Practice. Evaluation of chronic cough - Differentials. BMJ Best Practice US. 2025." },
-      { id: 2, text: "Kasper DL, et al. Harrison's Principles of Internal Medicine. 20th ed. McGraw-Hill; 2018." },
-      { id: 3, text: "WebMD. Is It Bronchitis or Pneumonia? WebMD. 2025." },
-      { id: 4, text: "Mayo Clinic. Bronchitis - Symptoms and causes. Mayo Clinic. 2024." },
-      { id: 5, text: "Cleveland Clinic. Pneumonia: Causes, Symptoms, Diagnosis & Treatment. 2025." },
-    ],
-  },
-  {
-    id: "2",
-    type: "user",
-    content: "Patient has severe stomach pain and vomiting",
-  },
-  {
-    id: "3",
-    type: "assistant",
-    content: "Let me research the latest clinical evidence for severe abdominal pain and vomiting.",
-  },
-];
+import { ChatMode } from "@/types/chat";
+import { useChat } from "@/contexts/ChatContext";
 
 const Chat = () => {
   const [searchParams] = useSearchParams();
-  const chatMode = (searchParams.get("mode") as ChatMode) || "interactive";
+  const navigate = useNavigate();
+  const urlMode = (searchParams.get("mode") as ChatMode) || "interactive";
+  const initialMessage = searchParams.get("initial");
+  
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [messages, setMessages] = useState<Message[]>(sampleMessages);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [hasProcessedInitial, setHasProcessedInitial] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const {
+    currentConversation,
+    isTyping,
+    sendMessage,
+    createNewConversation,
+    selectConversation,
+    getChatHistory,
+    setCurrentMode,
+  } = useChat();
+
+  // Handle initial message from URL
+  useEffect(() => {
+    if (initialMessage && !hasProcessedInitial) {
+      setHasProcessedInitial(true);
+      setCurrentMode(urlMode);
+      
+      // If no current conversation, create one
+      if (!currentConversation || currentConversation.messages.length === 0) {
+        sendMessage(decodeURIComponent(initialMessage));
+      }
+      
+      // Clear the initial message from URL
+      navigate(`/chat?mode=${urlMode}`, { replace: true });
+    }
+  }, [initialMessage, hasProcessedInitial, currentConversation, sendMessage, setCurrentMode, urlMode, navigate]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -58,17 +62,25 @@ const Chat = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [currentConversation?.messages, isTyping]);
 
-  const handleSendMessage = (content: string) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      type: "user",
-      content,
-    };
-    setMessages([...messages, newMessage]);
+  const handleSendMessage = async (content: string) => {
+    if (!currentConversation) {
+      createNewConversation(urlMode);
+    }
+    await sendMessage(content);
   };
 
+  const handleChatSelect = (id: string) => {
+    selectConversation(id);
+  };
+
+  const handleNewChat = () => {
+    navigate("/");
+  };
+
+  const messages = currentConversation?.messages || [];
+  const chatHistory = getChatHistory();
   let userMessageCount = 0;
 
   return (
@@ -80,7 +92,10 @@ const Chat = () => {
       <Sidebar 
         isCollapsed={sidebarCollapsed} 
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-        activeChat="1"
+        activeChat={currentConversation?.id}
+        chatHistory={chatHistory}
+        onChatSelect={handleChatSelect}
+        onNewChat={handleNewChat}
       />
 
       {/* Main Content */}
@@ -88,10 +103,10 @@ const Chat = () => {
         <Header 
           userInitials="RR" 
           showNavPills={true}
-          currentQuestion={2}
-          totalQuestions={2}
+          currentQuestion={messages.filter(m => m.type === "user").length}
+          totalQuestions={messages.filter(m => m.type === "user").length}
         >
-          <ModeBadge mode={chatMode} size="md" />
+          <ModeBadge mode={currentConversation?.mode || urlMode} size="md" />
         </Header>
 
         {/* Messages */}
@@ -101,6 +116,12 @@ const Chat = () => {
           className="flex-1 overflow-y-auto scrollbar-thin"
         >
           <div className="max-w-3xl mx-auto px-6 py-8 space-y-6">
+            {messages.length === 0 && !isTyping && (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground">Start a conversation by typing a message below.</p>
+              </div>
+            )}
+            
             {messages.map((message, index) => {
               if (message.type === "user") {
                 userMessageCount++;
@@ -112,10 +133,13 @@ const Chat = () => {
                   content={message.content}
                   references={message.references}
                   messageNumber={message.type === "user" ? userMessageCount : undefined}
-                  className={`animation-delay-${index * 100}`}
+                  className={`animate-fade-in`}
                 />
               );
             })}
+            
+            {isTyping && <TypingIndicator className="animate-fade-in" />}
+            
             <div ref={messagesEndRef} />
           </div>
         </main>
